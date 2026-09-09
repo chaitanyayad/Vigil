@@ -1,0 +1,61 @@
+[project]
+name = "vigil-orchestrator"
+version = "0.1.0"
+description = "VIGIL orchestrator - ingest, rules, ML anomaly detection, LLM triage, tamper-evident ledger"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.30",
+    "sqlalchemy[asyncio]>=2.0.30",
+    "asyncpg>=0.29",
+    "alembic>=1.13",
+    "redis>=5.0",
+    "pydantic>=2.7",
+    "pydantic-settings>=2.2",
+    "argon2-cffi>=23.1",
+    "pyjwt>=2.8",
+    "httpx>=0.27",
+    "numpy>=1.26",
+    "pandas>=2.2",
+    "scikit-learn>=1.4",
+    "joblib>=1.4",
+    "web3>=6.19",
+    "apscheduler>=3.10",
+    "pgvector>=0.2.5",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.2",
+    "pytest-asyncio>=0.23",
+    "respx>=0.21",
+    "ruff>=0.5",
+    "mypy>=1.10",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+markers = [
+    "integration: needs a live TimescaleDB/Redis (docker compose up timescaledb redis)",
+]
+
+[tool.ruff]
+line-length = 112
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+ignore = ["B008"]  # FastAPI Depends() in defaults
+
+[tool.mypy]
+python_version = "3.12"
+ignore_missing_imports = true
+check_untyped_defs = true
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["vigil"]
