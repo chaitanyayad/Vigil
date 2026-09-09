@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+
+# Env / secrets
+.env
+*.key
+
+# ML artifacts
+ml_artifacts/
+*.joblib
+
+# Node
+node_modules/
+frontend/dist/
+frontend/tsconfig.tsbuildinfo
+
+# Foundry
+contracts/cache/
+contracts/out/
+contracts/broadcast/
+contracts/lib/
+
+# Misc
+.DS_Store
+*.log
+agent_buffer/
+
+# Local-only working notes and tooling
+DEPLOYMENT.md
+rewrite_history.py
