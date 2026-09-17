@@ -1,0 +1,71 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    services:
+      timescaledb:
+        image: timescale/timescaledb-ha:pg16
+        env:
+          POSTGRES_USER: vigil
+          POSTGRES_PASSWORD: vigil
+          POSTGRES_DB: vigil
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U vigil" --health-interval 5s
+          --health-timeout 3s --health-retries 20
+      redis:
+        image: redis:7-alpine
+        ports: ["6379:6379"]
+        options: >-
+          --health-cmd "redis-cli ping" --health-interval 5s
+          --health-timeout 3s --health-retries 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v4
+      - name: Install orchestrator
+        working-directory: orchestrator
+        run: uv sync --python 3.12
+      - name: Lint
+        working-directory: orchestrator
+        run: |
+          uv run ruff check vigil tests
+          uv run mypy vigil
+      - name: Tests (unit + endpoint integration)
+        working-directory: orchestrator
+        run: uv run pytest tests -q
+      - name: Agent tests
+        working-directory: agent
+        run: |
+          uv sync --python 3.12
+          uv run pytest tests -q
+
+  contracts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: foundry-rs/foundry-toolchain@v1
+      - name: Install forge-std
+        working-directory: contracts
+        run: forge install foundry-rs/forge-std --no-git
+      - name: Forge tests
+        working-directory: contracts
+        run: forge test -vv
+
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Build
+        working-directory: frontend
+        run: |
+          npm ci
+          npm run build
