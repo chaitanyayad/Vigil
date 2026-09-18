@@ -1,0 +1,156 @@
+@import "tailwindcss";
+
+/* VIGIL — dark-first monitoring console.
+   Palette: validated dataviz reference set (dark-mode steps). */
+:root {
+  color-scheme: dark;
+
+  --page: #0d0d0d;
+  --surface: #1a1a19;
+  --surface-2: #222221;
+  --ink: #ffffff;
+  --ink-2: #c3c2b7;
+  --muted: #898781;
+  --grid: #2c2c2a;
+  --baseline: #383835;
+  --ring: rgba(255, 255, 255, 0.1);
+
+  /* categorical series (fixed order — never cycled) */
+  --s1: #3987e5;
+  --s2: #d95926;
+  --s3: #199e70;
+  --s4: #c98500;
+  --s5: #d55181;
+  --s6: #9085e9;
+
+  /* status (reserved, never reused for series) */
+  --good: #0ca30c;
+  --warn: #fab219;
+  --serious: #ec835a;
+  --crit: #d03b3b;
+
+  --font-mono: ui-monospace, "Cascadia Code", "JetBrains Mono", Menlo, Consolas, monospace;
+}
+
+@theme {
+  --color-page: var(--page);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-muted: var(--muted);
+  --color-grid: var(--grid);
+  --color-baseline: var(--baseline);
+  --color-ring-c: var(--ring);
+  --color-s1: var(--s1);
+  --color-s2: var(--s2);
+  --color-s3: var(--s3);
+  --color-s4: var(--s4);
+  --color-s5: var(--s5);
+  --color-s6: var(--s6);
+  --color-good: var(--good);
+  --color-warn: var(--warn);
+  --color-serious: var(--serious);
+  --color-crit: var(--crit);
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--page);
+  color: var(--ink);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 14px;
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+/* micro section label — part of the console identity */
+.microlabel {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--ring);
+  border-radius: 8px;
+}
+
+.hairline {
+  border-color: var(--ring);
+}
+
+/* pulsing live dot */
+@keyframes pulse-dot {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+.live-dot {
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+input,
+select,
+button {
+  font: inherit;
+}
+
+.field {
+  background: var(--surface-2);
+  border: 1px solid var(--ring);
+  border-radius: 6px;
+  padding: 6px 10px;
+  color: var(--ink);
+  outline: none;
+}
+.field:focus {
+  border-color: var(--s1);
+}
+
+.btn {
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid var(--ring);
+  background: var(--surface-2);
+  color: var(--ink);
+}
+.btn:hover {
+  background: #2a2a28;
+}
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.btn-primary {
+  background: var(--s1);
+  border-color: transparent;
+  color: #fff;
+}
+.btn-primary:hover {
+  background: #2a78d6;
+}
+.btn-danger {
+  background: transparent;
+  border-color: var(--crit);
+  color: #e66767;
+}
+.btn-danger:hover {
+  background: rgba(208, 59, 59, 0.12);
+}
